@@ -16,10 +16,8 @@ const shots = 3;
 
 let spriteX = 0;
 let spriteY = 0;
-let bottomPressed = false;
-let topPressed = false;
-let rightPressed = false;
-let leftPressed = false;
+let keyPressed = null;
+let keyReleased = null;
 let pY = canvasWidth / 2 - imgW / 2;
 let pX = canvasHeight / 2 - imgH / 2;
 
@@ -27,34 +25,22 @@ function keyDownHandler(e) {
   switch (e.key) {
     case 'Down':
     case 'ArrowDown':
-      bottomPressed = true;
-      topPressed = false;
-      rightPressed = false;
-      leftPressed = false;
+      keyPressed = 'down';
       spriteY = 0;
       break;
     case 'Up':
     case 'ArrowUp':
-      topPressed = true;
-      bottomPressed = false;
-      leftPressed = false;
-      rightPressed = false;
+      keyPressed = 'up';
       spriteY = 3;
       break;
     case 'Right':
     case 'ArrowRight':
-      rightPressed = true;
-      bottomPressed = false;
-      leftPressed = false;
-      topPressed = false;
+      keyPressed = 'right';
       spriteY = 2;
       break;
     case 'Left':
     case 'ArrowLeft':
-      leftPressed = true;
-      bottomPressed = false;
-      rightPressed = false;
-      topPressed = false;
+      keyPressed = 'left';
       spriteY = 1;
       break;
     default:
@@ -67,23 +53,27 @@ function keyUpHandler(e) {
   switch (e.key) {
     case 'Down':
     case 'ArrowDown':
-      bottomPressed = false;
+      keyReleased = 'down';
       break;
     case 'Up':
     case 'ArrowUp':
-      topPressed = false;
+      keyReleased = 'up';
       break;
     case 'Right':
     case 'ArrowRight':
-      rightPressed = false;
+      keyReleased = 'right';
       break;
     case 'Left':
     case 'ArrowLeft':
-      leftPressed = false;
+      keyReleased = 'left';
       break;
     default:
       console.log('SomethingReleased');
       break;
+  }
+
+  if (keyReleased === keyPressed) {
+    keyPressed = null;
   }
 }
 
@@ -106,20 +96,20 @@ function switchNextSpriteLoopWalk() {
 
 img.addEventListener('load', () => {
   setInterval(() => {
-    switch (true) {
-      case bottomPressed:
+    switch (keyPressed) {
+      case 'down':
         pY += 10;
         switchNextSpriteLoopWalk();
         break;
-      case topPressed:
+      case 'up':
         pY -= 10;
         switchNextSpriteLoopWalk();
         break;
-      case rightPressed:
+      case 'right':
         pX += 10;
         switchNextSpriteLoopWalk();
         break;
-      case leftPressed:
+      case 'left':
         pX -= 10;
         switchNextSpriteLoopWalk();
         break;
