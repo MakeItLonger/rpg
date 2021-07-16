@@ -10,5 +10,7 @@ module.exports = {
   },
   rules: {
     'linebreak-style': ['error', 'unix'],
+    'no-unused-expressions': ["error", { "allowShortCircuit": true }],
+    'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
   },
 };
