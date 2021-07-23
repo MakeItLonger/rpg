@@ -39,30 +39,54 @@ class ClientGame {
     });
   }
 
-  movePlayer(x, y) {
-    const func = (keydown) => {
-      console.log(keydown);
-      if (keydown) {
-        this.player.moveByCellCoord(x, y, (cell) => cell.findObjectsByType('grass').length);
-      }
-    };
-    return func;
-  }
+  // movePlayer(x, y) {
+  //   const func = (keydown) => {
+  //     console.log(keydown);
+  //     if (keydown) {
+  //       this.player.moveByCellCoord(x, y, (cell) => cell.findObjectsByType('grass').length);
+  //     }
+  //   };
+  //   return func;
+  // }
 
   initKeys() {
     this.engine.input.onKey({
-      // ArrowLeft: (keydown) => {
-      //   console.log(keydown);
-      //   if (keydown) {
-      //     this.player.moveByCellCoord(-1, 0, (cell) => {
-      //       return cell.findObjectsByType('grass').length;
-      //     })
-      //   }
-      // },
-      ArrowLeft: this.movePlayer(-1, 0),
-      ArrowRight: this.movePlayer(+1, 0),
-      ArrowDown: this.movePlayer(0, +1),
-      ArrowUp: this.movePlayer(0, -1),
+      ArrowLeft: (keydown) => {
+        console.log(keydown);
+        if (keydown) {
+          this.player.moveByCellCoord(-1, 0, (cell) => {
+            return cell.findObjectsByType('grass').length;
+          })
+        }
+      },
+      ArrowRight: (keydown) => {
+        console.log(keydown);
+        if (keydown) {
+          this.player.moveByCellCoord(+1, 0, (cell) => {
+            return cell.findObjectsByType('grass').length;
+          })
+        }
+      },
+      ArrowDown: (keydown) => {
+        console.log(keydown);
+        if (keydown) {
+          this.player.moveByCellCoord(0, +1, (cell) => {
+            return cell.findObjectsByType('grass').length;
+          })
+        }
+      },
+      ArrowUp: (keydown) => {
+        console.log(keydown);
+        if (keydown) {
+          this.player.moveByCellCoord(0, -1, (cell) => {
+            return cell.findObjectsByType('grass').length;
+          })
+        }
+      },
+      // ArrowLeft: this.movePlayer(-1, 0),
+      // ArrowRight: this.movePlayer(+1, 0),
+      // ArrowDown: this.movePlayer(0, +1),
+      // ArrowUp: this.movePlayer(0, -1),
     });
   }
 
