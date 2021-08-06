@@ -68,7 +68,7 @@ class ClientWorld extends PositionedObject {
   render(time) {
     const {
       // map, worldWidth, worldHeight,
-      levelCfg, 
+      levelCfg,
     } = this;
 
     for (let layerID = 0; layerID < levelCfg.layers.length; layerID++) {

@@ -98,9 +98,7 @@ class ClientGameObject extends MovableObject {
     } = this;
     const { engine } = world;
     // states
-    const {
-      sprite, frame, type,
-    } = this.spriteCfg;
+    const { sprite, frame, type } = this.spriteCfg;
 
     const spriteFrame = type === 'static' ? frame : this.getCurrentFrame(time);
 
