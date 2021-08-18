@@ -4,15 +4,7 @@ class ClientPlayer extends ClientGameObject {
   constructor(cfg) {
     super(cfg);
 
-    const startGame = document.querySelector('.start-game');
-    const inputName = document.querySelector('input');
-    const submBut = document.querySelector('button');
-
-    submBut.addEventListener('click', (e) => {
-      e.preventDefault();
-      startGame.remove();
-      this.playerName = inputName.value;
-    });
+    this.playerName = cfg.playerName;
 
     const { world } = cfg.cell;
 

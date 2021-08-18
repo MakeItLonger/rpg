@@ -12,7 +12,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     'no-unused-expressions': ["error", { "allowShortCircuit": true }],
     'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
-    'max-len': ["error", { "code": 120 }],
+    'max-len': ["error", { "code": 120, "ignoreStrings": true}],
     'no-bitwise': ["error", { "allow": ["|"] }],
     'no-param-reassign': ["error", { "props": false }],
     'no-return-assign': ["error", "except-parens"],
