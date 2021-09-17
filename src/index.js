@@ -1,4 +1,4 @@
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
 import './index.scss';
 import ClientGame from './client/ClientGame';
 import { getTime } from './common/util';
@@ -155,7 +155,7 @@ import { getTime } from './common/util';
 //
 window.addEventListener('load', async () => {
   // const socket = io('https://jsprochat.herokuapp.com');
-  // const socket = io('https://jspromarathonchat.herokuapp.com/');
+  const socket = io('https://jspromarathonchat.herokuapp.com/');
   // const socket = io('http://localhost:3001');
   const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
   const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
@@ -173,7 +173,7 @@ window.addEventListener('load', async () => {
 
   $startGame.style.display = 'flex';
 
-  const myID = null;
+  let myID = null;
 
   const funcSumbitForm = (e) => {
     e.preventDefault();
@@ -191,7 +191,7 @@ window.addEventListener('load', async () => {
         },
       });
 
-      // socket.emit('start', $inputName.value);
+      socket.emit('start', $inputName.value);
 
       $chat.style.display = 'block';
       $nameForm.removeEventListener('submit', funcSumbitForm);
@@ -205,41 +205,43 @@ window.addEventListener('load', async () => {
     e.preventDefault();
 
     if ($chatInput.value) {
-      // socket.emit('chat message', $chatInput.value);
+      socket.emit('chat message', $chatInput.value);
 
       $chatInput.value = '';
     }
   });
 
-  //   socket.on('connect', () => {
-  //     myID = socket.id;
-  //   });
+  socket.on('connect', () => {
+    myID = socket.id;
+  });
 
-  //   socket.on('chat connection', (data) => {
-  //     $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
-  //   });
+  socket.on('chat connection', (data) => {
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+  });
 
-  //   socket.on('chat disconnect', (data) => {
-  //     $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
-  //   });
+  socket.on('chat disconnect', (data) => {
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+  });
 
-  //   socket.on('chat online', (data) => {
-  //     $chatMessage.insertAdjacentHTML(
-  //       'beforeend',
-  //       `<p><strong>${getTime(data.time)}</strong> - Количество пользователей в чате на данный момент - ${
-  //         data.online
-  //       }</p>`,
-  //     );
-  //     data.names.forEach((obj) => {
-  //       $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} c id - ${obj.id} - в сети!</p>`);
-  //     });
-  //   });
+  socket.on('chat online', (data) => {
+    $chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p><strong>${getTime(data.time)}</strong> - Количество пользователей в чате на данный момент - ${
+        data.online
+      }</p>`,
+    );
+    data.names.forEach((obj) => {
+      // $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} c id - ${obj.id} - в сети!</p>`);
+      $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} - в сети!</p>`);
+    });
+  });
 
-  //   socket.on('chat message', (data) => {
-  //     $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+  socket.on('chat message', (data) => {
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
 
-  //     if (data.id === myID) {
-  //       $chatMessage.lastChild.style.cssText
-  //         += 'text-shadow:-1px -1px #fff,-2px -2px #fff,-1px 1px #fff,-2px 2px #fff,1px 1px #fff,2px 2px #fff,1px -1px #fff,2px -2px #fff,-3px -3px 2px #bbb,-3px 3px 2px #bbb,3px 3px 2px #bbb,3px -3px 2px #bbb;color:#4682b4';
-  //     }
+    if (data.id === myID) {
+      $chatMessage.lastChild.style.cssText
+        += 'text-shadow:-1px -1px #fff,-2px -2px #fff,-1px 1px #fff,-2px 2px #fff,1px 1px #fff,2px 2px #fff,1px -1px #fff,2px -2px #fff,-3px -3px 2px #bbb,-3px 3px 2px #bbb,3px 3px 2px #bbb,3px -3px 2px #bbb;color:#4682b4';
+    }
+  });
 });
