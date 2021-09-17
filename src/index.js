@@ -231,7 +231,6 @@ window.addEventListener('load', async () => {
       }</p>`,
     );
     data.names.forEach((obj) => {
-      // $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} c id - ${obj.id} - в сети!</p>`);
       $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} - в сети!</p>`);
     });
   });
