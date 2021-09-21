@@ -9,7 +9,7 @@ class ClientGame {
   constructor(cfg) {
     Object.assign(this, {
       cfg,
-      gameObjects: cfg.gameObjects,
+      gameObjects,
       player: null,
       players: {},
       api: new ClientApi({
@@ -34,7 +34,7 @@ class ClientGame {
   }
 
   createWorld() {
-    return new ClientWorld(this, this.engine, this.cfg.world);
+    return new ClientWorld(this, this.engine, levelCfg);
   }
 
   getWorld() {
@@ -42,7 +42,7 @@ class ClientGame {
   }
 
   initEngine() {
-    this.engine.loadSprites(this.cfg.sprites).then(() => {
+    this.engine.loadSprites(sprites).then(() => {
       this.map.init();
       this.engine.on('render', (_, time) => {
         this.player && this.engine.camera.focusAtGameObject(this.player);
@@ -60,7 +60,7 @@ class ClientGame {
   }
 
   createCurrentPlayer(playerCfg) {
-    console.log(playerCfg);
+    // console.log(playerCfg);
     const playerObj = this.createPlayer(playerCfg);
 
     this.setPlayer(playerObj);
