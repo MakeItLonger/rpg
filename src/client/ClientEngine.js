@@ -5,7 +5,7 @@ import { clamp } from '../common/util';
 
 class ClientEngine {
   constructor(canvas, game) {
-    console.log(canvas);
+    // console.log(canvas);
 
     Object.assign(this, {
       canvas,

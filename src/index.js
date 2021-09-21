@@ -153,13 +153,13 @@ import { getTime } from './common/util';
 //   window.requestAnimationFrame(walk);
 // });
 //
-window.addEventListener('load', async () => {
+window.addEventListener('load', () => {
   // const socket = io('https://jsprochat.herokuapp.com');
   const socket = io('https://jspromarathonchat.herokuapp.com/');
   // const socket = io('http://localhost:3001');
-  const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
-  const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
-  const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then((res) => res.json());
+  // const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
+  // const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
+  // const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then((res) => res.json());
 
   const $startGame = document.querySelector('.start-game');
   const $nameForm = document.getElementById('nameForm');
@@ -170,8 +170,11 @@ window.addEventListener('load', async () => {
   const $chatForm = document.getElementById('form');
   const $chatInput = document.getElementById('input');
   const $chatMessage = document.querySelector('.message');
+  const $audio = document.querySelector('.audio');
 
-  $startGame.style.display = 'flex';
+  
+
+  // $startGame.style.display = 'flex';
 
   let myID = null;
 
@@ -182,9 +185,9 @@ window.addEventListener('load', async () => {
       ClientGame.init({
         tagId: 'game',
         playerName: $inputName.value,
-        world,
-        sprites,
-        gameObjects,
+        // world,
+        // sprites,
+        // gameObjects,
         apiCfg: {
           url: 'https://jsmarathonpro.herokuapp.com/',
           path: '/game',
@@ -196,6 +199,7 @@ window.addEventListener('load', async () => {
       $chat.style.display = 'block';
       $nameForm.removeEventListener('submit', funcSumbitForm);
       $startGame.remove();
+      $audio.play();
     }
   };
 
@@ -216,31 +220,40 @@ window.addEventListener('load', async () => {
   });
 
   socket.on('chat connection', (data) => {
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 10)} has joined the chat</p>`);
   });
 
   socket.on('chat disconnect', (data) => {
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 11)} has left the chat</p>`);
   });
 
   socket.on('chat online', (data) => {
     $chatMessage.insertAdjacentHTML(
       'beforeend',
-      `<p><strong>${getTime(data.time)}</strong> - Количество пользователей в чате на данный момент - ${
+      `<p><strong>${getTime(data.time)} - </strong>${
         data.online
-      }</p>`,
+      } user${(data.online > 1) && 's'} online</p>`,
     );
-    data.names.forEach((obj) => {
-      $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} - в сети!</p>`);
-    });
+    // data.names.forEach((obj) => {
+    //   $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} - в сети!</p>`);
+    // });
+
   });
 
   socket.on('chat message', (data) => {
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+    let userName = `<b>${data.name}:</b>`;
 
     if (data.id === myID) {
-      $chatMessage.lastChild.style.cssText
-        += 'text-shadow:-1px -1px #fff,-2px -2px #fff,-1px 1px #fff,-2px 2px #fff,1px 1px #fff,2px 2px #fff,1px -1px #fff,2px -2px #fff,-3px -3px 2px #bbb,-3px 3px 2px #bbb,3px 3px 2px #bbb,3px -3px 2px #bbb;color:#4682b4';
+      userName = `<u>${userName}</u>`;
     }
+
+    $chatMessage.insertAdjacentHTML('beforeend', `<p><b>${getTime(data.time)} </b><span style="color: #0633ff;">${userName}</span> ${data.msg}</p>`);
+
+    $chatMessage.scrollTop = $chatMessage.scrollHeight;
+
+    // if (data.id === myID) {
+    //   $chatMessage.lastChild.style.cssText
+    //     += 'text-shadow:-1px -1px #fff,-2px -2px #fff,-1px 1px #fff,-2px 2px #fff,1px 1px #fff,2px 2px #fff,1px -1px #fff,2px -2px #fff,-3px -3px 2px #bbb,-3px 3px 2px #bbb,3px 3px 2px #bbb,3px -3px 2px #bbb;color:#4682b4';
+    // }
   });
 });

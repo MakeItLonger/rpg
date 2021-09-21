@@ -16,14 +16,19 @@ class ClientInput {
     this.keysPressed.add(e.code);
     this.keyHandlers[e.code] && this.keyHandlers[e.code](true);
     this.trigger('keydown', e);
-    window.document.body.style.overflow = 'hidden';
+    console.log(e.code);
+    if (e.code === 'ArrowDown' || e.code === 'ArrowUp') {
+      e.preventDefault();
+    }
+    // window.document.body.style.overflow = 'hidden';
   }
 
   onKeyUp(e) {
     this.keysPressed.delete(e.code);
     this.keyHandlers[e.code] && this.keyHandlers[e.code](false);
     this.trigger('keyup', e);
-    window.document.body.style.overflow = 'auto';
+    // e.preventDefault();
+    // window.document.body.style.overflow = 'auto';
   }
 
   onKey({ ...handlers }) {
