@@ -172,8 +172,6 @@ window.addEventListener('load', () => {
   const $chatMessage = document.querySelector('.message');
   const $audio = document.querySelector('.audio');
 
-  
-
   // $startGame.style.display = 'flex';
 
   let myID = null;
@@ -220,24 +218,27 @@ window.addEventListener('load', () => {
   });
 
   socket.on('chat connection', (data) => {
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 10)} has joined the chat</p>`);
+    $chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 10)} has joined the chat</p>`,
+    );
   });
 
   socket.on('chat disconnect', (data) => {
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 11)} has left the chat</p>`);
+    $chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p><strong>${getTime(data.time)} - </strong>${data.msg.substr(0, data.msg.length - 11)} has left the chat</p>`,
+    );
   });
 
   socket.on('chat online', (data) => {
     $chatMessage.insertAdjacentHTML(
       'beforeend',
-      `<p><strong>${getTime(data.time)} - </strong>${
-        data.online
-      } user${(data.online > 1) && 's'} online</p>`,
+      `<p><strong>${getTime(data.time)} - </strong>${data.online} user${data.online > 1 ? 's' : ''} online</p>`,
     );
     // data.names.forEach((obj) => {
     //   $chatMessage.insertAdjacentHTML('beforeend', `<p>Пользователь - ${obj.name} - в сети!</p>`);
     // });
-
   });
 
   socket.on('chat message', (data) => {
@@ -247,7 +248,10 @@ window.addEventListener('load', () => {
       userName = `<u>${userName}</u>`;
     }
 
-    $chatMessage.insertAdjacentHTML('beforeend', `<p><b>${getTime(data.time)} </b><span style="color: #0633ff;">${userName}</span> ${data.msg}</p>`);
+    $chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p><b>${getTime(data.time)} </b><span style="color: #0633ff;">${userName}</span> ${data.msg}</p>`,
+    );
 
     $chatMessage.scrollTop = $chatMessage.scrollHeight;
 
